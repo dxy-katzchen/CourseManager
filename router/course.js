@@ -18,7 +18,7 @@ const {
   stuChooseCourse,
   stuEvaluateCourse,
 } = require("../router_handler/course");
-
+// test
 //管理员对课程的CRUD
 router.post("/create", expressJoi(create_course_schema), createCourse);
 router.post("/update", expressJoi(update_course_schema), updateCourse);
