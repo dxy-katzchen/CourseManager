@@ -335,3 +335,6 @@ exports.stuEvaluateCourse = async (req, res) => {
 };
 
 //老师给学生打分
+exports.teacherMarkStu=async(req,res)=>{
+  res.cc('ok')
+}
