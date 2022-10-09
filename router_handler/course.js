@@ -1,4 +1,4 @@
-const { response } = require("express");
+const res = require("express/lib/response");
 const { query } = require("../db");
 
 const { removeEmpty } = require("../utils/removeEmpty");
@@ -305,7 +305,7 @@ exports.stuChooseCourse = async (req, res) => {
  * @apiVersion 1.0.0
  */
 exports.stuEvaluateCourse = async (req, res) => {
-/** 
+  /** 
 学生互评:学生给这门课程打分
 必须在课程is_open字段为0时,即选课已关闭时才能执行该操作
 执行操作的人必须是学生
@@ -335,6 +335,79 @@ exports.stuEvaluateCourse = async (req, res) => {
 };
 
 //老师给学生打分
-exports.teacherMarkStu=async(req,res)=>{
-  res.cc('ok')
+exports.teacherMarkStu = async (req, res) => {
+  const { uid, role } = req.user;
+  if (role !== 2) return res.cc("您没有教师权限");
+  res.cc("ok");
+};
+//老师获取选择这门课程的所有学生列表
+exports.getCourseStuList = async (req, res) => {
+  const { uid, role } = req.user;
+  if (role !== 2) return res.cc("您没有教师权限");
+  res.cc("ok");
+};
+/**
+ * @api {post} /course/teacher/getMyCourseList 获取我教的课程列表(Tea)
+ * @apiDescription 获取我教的课程列表(Tea)
+ * @apiName getMyCourseList
+ * @apiGroup CourseTeacher
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
+ *     }
+
+ * @apiSuccessExample {json} 返回内容:
+{
+    "status": 0,
+    "length": 3,
+    "message": "获取您的教课列表成功!",
+    "data": [
+        {
+            "cid": 13,
+            "is_open": 0,
+            "cname": "数据库课程设计",
+            "credit": 2,
+            "type": 1,
+            "tid": "201900301088",
+            "tname": "dxyxy"
+        },
+        {
+            "cid": 14,
+            "is_open": 0,
+            "cname": "数据库课程设计",
+            "credit": 2,
+            "type": 1,
+            "tid": "201900301088",
+            "tname": "dxyxy"
+        },
+        {
+            "cid": 15,
+            "is_open": 0,
+            "cname": "数据库课程设计",
+            "credit": 2,
+            "type": 1,
+            "tid": "201900301088",
+            "tname": "dxyxy"
+        },
+     
+    ]
 }
+ * @apiVersion 1.0.0
+ */
+
+exports.getMyCourseList = async (req, res) => {
+  const { uid, role } = req.user;
+  if (role !== 2) return res.cc("您没有教师权限");
+  let sql = "select * from course where tid=?";
+  try {
+    let result = await query(sql, uid);
+    res.send({
+      status: 0,
+      length: result.length,
+      message: "获取您的教课列表成功!",
+      data: result,
+    });
+  } catch (error) {
+    res.cc(error);
+  }
+};

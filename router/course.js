@@ -17,6 +17,9 @@ const {
   deleteCourse,
   stuChooseCourse,
   stuEvaluateCourse,
+  getCourseStuList,
+  teacherMarkStu,
+  getMyCourseList,
 } = require("../router_handler/course");
 // test
 //管理员对课程的CRUD
@@ -37,15 +40,12 @@ router.post(
   stuEvaluateCourse
 );
 //老师给学生打分
-// router.post(
-//   '/teacher/mark',
+router.post("/teacher/mark", teacherMarkStu);
 
+//老师获取选择该门课程的所有学生列表
+router.get("/teacher/getCourseStuList", getCourseStuList);
 
-// )
-
-//老师,管理员获取选择该门课程的所有学生列表
-
-
-
+//老师获取他教的课程列表
+router.get("/teacher/getMyCourseList", getMyCourseList);
 
 module.exports = router;
