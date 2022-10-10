@@ -29,6 +29,8 @@ router.post("/create", expressJoi(create_course_schema), createCourse);
 router.post("/update", expressJoi(update_course_schema), updateCourse);
 router.get("/getCourseList", expressJoi(get_course_list_schema), getCourseList);
 router.post("/delete", expressJoi(delete_course_schema), deleteCourse);
+//获取某个课程的公开信息
+// router.get("/info")
 //学生选课
 router.post(
   "/student/choose",
@@ -57,5 +59,7 @@ router.get(
 
 //老师获取他教的课程列表
 router.get("/teacher/getMyCourseList", getMyCourseList);
+
+
 
 module.exports = router;

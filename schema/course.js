@@ -1,6 +1,7 @@
 const joi = require("joi");
 
 const cid = joi.number().integer().min(1);
+
 const tid = joi.string().min(12).max(12);
 const uid = joi.string().min(12).max(12).required();
 //是否开放选课 0为未开放,1为开放
@@ -14,9 +15,10 @@ const pageCurr = joi.number().integer().min(1).required();
 
 const ev_score = joi.number().integer().min(1).max(100).required();
 
+
 exports.create_course_schema = {
   body: {
-    tid: tid.required(),
+    tid: myRequire(tid),
     is_open: is_open.required(),
     cname: cname.required(),
     credit: credit.required(),

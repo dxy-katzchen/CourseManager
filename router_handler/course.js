@@ -511,3 +511,4 @@ exports.getMyCourseList = async (req, res) => {
 };
 
 //获取某一个课程的公开信息(common)
+
