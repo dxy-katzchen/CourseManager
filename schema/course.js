@@ -2,7 +2,7 @@ const joi = require("joi");
 
 const cid = joi.number().integer().min(1);
 const tid = joi.string().min(12).max(12);
-
+const uid = joi.string().min(12).max(12).required();
 //是否开放选课 0为未开放,1为开放
 const is_open = joi.number().integer().min(0).max(1);
 const cname = joi.string().min(1);
@@ -62,8 +62,16 @@ exports.stu_evaluate_course_schema = {
   },
 };
 
-exports.get_teacher_my_course_stu_schema={
-  body:{
+exports.get_teacher_my_course_stu_schema = {
+  body: {
     cid: cid.required(),
-  }
-}
+  },
+};
+
+exports.teacher_mark_stu_schema = {
+  body: {
+    stu_id: uid,
+    cid: cid.required(),
+    score:ev_score
+  },
+};

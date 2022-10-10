@@ -10,6 +10,7 @@ const {
   stu_choose_course_schema,
   stu_evaluate_course_schema,
   get_teacher_my_course_stu_schema,
+  teacher_mark_stu_schema,
 } = require("../schema/course");
 const {
   createCourse,
@@ -41,7 +42,11 @@ router.post(
   stuEvaluateCourse
 );
 //老师给学生打分
-router.post("/teacher/mark", teacherMarkStu);
+router.post(
+  "/teacher/mark",
+  expressJoi(teacher_mark_stu_schema),
+  teacherMarkStu
+);
 
 //老师获取他教的一门课程的所有学生列表
 router.get(
