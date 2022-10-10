@@ -92,7 +92,7 @@ exports.login = async (req, res) => {
     //登陆成功,生成Token
     //剔除敏感信息
     const user = { ...result[0], password: "" };
-    const tokenStr = jwt.sign(user, jwtSecretKey, { expiresIn: "24h" });
+    const tokenStr = jwt.sign(user, jwtSecretKey, { expiresIn: "365d" });
 
     res.send({
       status: 0,

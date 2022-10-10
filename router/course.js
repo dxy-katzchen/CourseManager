@@ -11,6 +11,7 @@ const {
   stu_evaluate_course_schema,
   get_teacher_my_course_stu_schema,
   teacher_mark_stu_schema,
+ 
 } = require("../schema/course");
 const {
   createCourse,
@@ -22,15 +23,15 @@ const {
   getCourseStuList,
   teacherMarkStu,
   getMyCourseList,
+  
 } = require("../router_handler/course");
-// test
+
 //管理员对课程的CRUD
 router.post("/create", expressJoi(create_course_schema), createCourse);
 router.post("/update", expressJoi(update_course_schema), updateCourse);
 router.get("/getCourseList", expressJoi(get_course_list_schema), getCourseList);
 router.post("/delete", expressJoi(delete_course_schema), deleteCourse);
-//获取某个课程的公开信息
-// router.get("/info")
+
 //学生选课
 router.post(
   "/student/choose",

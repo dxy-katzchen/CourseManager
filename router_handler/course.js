@@ -1,3 +1,5 @@
+const { result } = require("@hapi/joi/lib/base");
+const { type } = require("express/lib/response");
 const res = require("express/lib/response");
 const { query } = require("../db");
 
@@ -115,24 +117,32 @@ exports.updateCourse = async (req, res) => {
     res.cc(error);
   }
 };
+//按条件查询课程的公开信息(common),可以根据cname,tname,cid,is_open筛选,没传就是全部
 
 /**
- * @api {get} /course/getCourseList 根据类型获取课程列表
- * @apiDescription 根据类型获取学工管理文章列表
+ * @api {get} /course/getCourseList 根据类型获取课程列表(common)
+ * @apiDescription 按条件查询课程的公开信息(common),可以根据cname,tname,cid,is_open筛选,没传就是全部
  * @apiName getCourseList
  * @apiGroup Course
  * @apiHeaderExample {json} Header-Example:
  *     {
  *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
  *     }
-
- * @apiBody {int} type 课程类型,1--必修,2--限选,3--选修,必填
  * @apiBody {int} pageSize 一页请求多少条数据,必填
- * @apiBody {iny} pageCurr 现在是多少页,必填
+ * @apiBody {int} pageCurr 现在是多少页,必填
+ * @apiBody {int} type 课程类型,1--必修,2--限选,3--选修,选填
+ * @apiBody {string} tname 教师名称,选填
+ * @apiBody {string} cname 课程名称,选填
+ * @apiBody {int} is_open 是否开放,0--未开放选课,1--开放选课,选填
+ * @apiBody {int} cid 课程id,选填
 
  * @apiExample {js} 请求示例:
  * {
-      type:1,
+      cid: 2,
+      cname: "大学物理",
+      is_open: 1,
+      tname: "教师1",
+      type: 1,
       pageSize: 10,
       pageCurr: 1,
  * }
@@ -140,55 +150,67 @@ exports.updateCourse = async (req, res) => {
  * @apiSuccessExample {json} 返回内容:
 {
     "status": 0,
-    "message": "获取成功",
-    "is_lastPage": true,
-    "data_number": 4,
+    "message": "成功获取课程信息",
     "data": [
         {
-            "cid": 1,
-            "is_open": 1,
-            "cname": "毕业设计",
-            "credit": 10,
-            "type": 1
-        },
-        {
             "cid": 2,
-            "is_open": 0,
-            "cname": "数据库课程设计",
-            "credit": 2,
-            "type": 1
-        },
-        {
-            "cid": 6,
-            "is_open": 0,
-            "cname": "数据库课程设计",
-            "credit": 2,
-            "type": 1
-        },
-        {
-            "cid": 7,
-            "is_open": 0,
-            "cname": "数据库课程设计",
-            "credit": 2,
-            "type": 1
+            "is_open": 1,
+            "cname": "大学物理",
+            "credit": 10,
+            "type": 1,
+            "tid": "201900301086",
+            "tname": "教师1"
         }
     ]
 }
  * @apiVersion 1.0.0
  */
 exports.getCourseList = async (req, res) => {
-  let { type, pageSize, pageCurr } = req.body;
+  let sql = "select * from course";
+  const { pageSize, pageCurr, ...queryInfo } = req.body;
   const start = (pageCurr - 1) * pageSize; //起始位置
-  let sql = "select * from course where type=? limit ?,? ";
   try {
-    let result = await query(sql, type, start, pageSize);
-    let is_lastPage = result.length < pageSize ? true : false;
+    let result = await query(sql);
+    if (JSON.stringify(queryInfo) == "{}")
+      return res.send({
+        status: 0,
+        message: "成功获取所有课程信息",
+        data: result,
+      });
+    sql += " where";
+    let obj = { sql };
+    //难点,亮点,动态拼接sql字符串
+    obj.addSql = function (currvar) {
+      if (currvar in queryInfo) {
+        if (this.sql.split("=").length > this.sql.split("and").length) {
+          this.sql += " and";
+        }
+        if (typeof queryInfo[currvar] === "string") {
+          //如果是字符串类型的数据需要加单引号
+          this.sql += " " + currvar + "=" + "'" + queryInfo[currvar] + "'";
+        } else {
+          this.sql += " " + currvar + "=" + queryInfo[currvar];
+        }
+      }
+      return obj;
+    };
+
+    obj
+      .addSql("cname")
+      .addSql("tname")
+      .addSql("cid")
+      .addSql("is_open")
+      .addSql("type");
+    sql = obj.sql;
+    sql += " limit " + start + "," + pageSize;
+
+    result = await query(sql);
+
     res.send({
       status: 0,
-      message: "获取成功",
-      is_lastPage,
-      data_number: result.length,
+      message: "成功获取课程信息",
       data: result,
+      
     });
   } catch (error) {
     res.cc(error);
@@ -509,6 +531,4 @@ exports.getMyCourseList = async (req, res) => {
     res.cc(error);
   }
 };
-
-//获取某一个课程的公开信息(common)
 
