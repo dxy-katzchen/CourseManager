@@ -62,8 +62,8 @@ exports.stu_evaluate_course_schema = {
   },
 };
 
-// exports.teacher_mark_schema={
-//   body:{
-
-//   }
-// }
+exports.get_teacher_my_course_stu_schema={
+  body:{
+    cid: cid.required(),
+  }
+}

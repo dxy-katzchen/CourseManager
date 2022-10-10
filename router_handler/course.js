@@ -336,19 +336,69 @@ exports.stuEvaluateCourse = async (req, res) => {
 
 //老师给学生打分
 exports.teacherMarkStu = async (req, res) => {
+  //1.校验老师权限
   const { uid, role } = req.user;
   if (role !== 2) return res.cc("您没有教师权限");
   res.cc("ok");
 };
-//老师获取选择这门课程的所有学生列表
+
+/**
+ * @api {post} /course/teacher/getCourseStuList 获取我的学生列表(Teacher)
+ * @apiDescription 根据cid获取我教的课程的学生列表(Teacher)
+ * @apiName getCourseStuList
+ * @apiGroup CourseTeacher
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
+ *     }
+ * @apiBody {int} cid 课程id,必填
+ * @apiExample {js} 请求示例:
+ * {
+        cid: 2,
+        ev_score:69
+ * }
+ * 
+ * @apiSuccessExample {json} 返回内容:
+{
+    "status": 0,
+    "message": "获取成功",
+    "data": [
+        {
+            "uid": "201900301083",
+            "cid": 18,
+            "ev_score": null,
+            "stu_score": null
+        }
+    ]
+}
+ * @apiVersion 1.0.0
+ */
+//老师获取他教的一门课程的所有学生列表
 exports.getCourseStuList = async (req, res) => {
+  //1.身份校验
   const { uid, role } = req.user;
   if (role !== 2) return res.cc("您没有教师权限");
-  res.cc("ok");
+  //2.验证这门课是不是这个老师教的,如果不是,没有权利查看学生列表
+  const { cid } = req.body;
+  let sql = "select * from course where cid=? and tid=?";
+  try {
+    let result = await query(sql, cid, uid);
+    if (result.length !== 1) return res.cc("此课程不存在或授课老师不是您");
+    //3.获取选择这门课的所有学生列表
+    sql = "select * from stu_choose_course where cid=?";
+    result = await query(sql, cid);
+    res.send({
+      status: 0,
+      message: "获取成功",
+      data: result,
+    });
+  } catch (error) {
+    res.cc(error);
+  }
 };
 /**
- * @api {post} /course/teacher/getMyCourseList 获取我教的课程列表(Tea)
- * @apiDescription 获取我教的课程列表(Tea)
+ * @api {post} /course/teacher/getMyCourseList 获取我教的课程列表(Teacher)
+ * @apiDescription 获取我教的课程列表(Teacher)
  * @apiName getMyCourseList
  * @apiGroup CourseTeacher
  * @apiHeaderExample {json} Header-Example:
@@ -394,7 +444,6 @@ exports.getCourseStuList = async (req, res) => {
 }
  * @apiVersion 1.0.0
  */
-
 exports.getMyCourseList = async (req, res) => {
   const { uid, role } = req.user;
   if (role !== 2) return res.cc("您没有教师权限");
