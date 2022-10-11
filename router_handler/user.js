@@ -2,13 +2,46 @@ const { query } = require("../db");
 const bcypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { jwtSecretKey } = require("../config");
+//自然人验证
+const svgCaptcha = require("svg-captcha");
 const { sendEmail } = require("../utils/sendEmail");
 //保存用户email和验证码键值对的map
 const checkCodeMap = new Map();
 //生成六位随机数的方法
 const randomFn = () =>
   Array.from({ length: 6 }, (_) => Math.floor(Math.random() * 10)).join("");
+/**
+ * @api {get} /users/captcha 自然人验证
+ * @apiDescription 自然人验证
+ * @apiName getCaptcha
+ * @apiGroup User
 
+ * @apiSuccessExample {json} 返回内容:
+ {
+    "status": 0,
+    "message": "成功获取验证码",
+    "text": "502f",
+    "svg_img": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"150\" height=\"50\" viewBox=\"0,0,150,..."
+ }
+ * @apiVersion 1.0.0
+ */
+//自然人验证
+exports.getCaptcha = async (req, res) => {
+  try {
+    const captcha = svgCaptcha.create();
+    const text = captcha.text;
+    const svg_img = captcha.data;
+
+    res.send({
+      status: 0,
+      message: "成功获取验证码",
+      text,
+      svg_img,
+    });
+  } catch (error) {
+    res.cc(error);
+  }
+};
 /**
  * @api {post} /users/register 注册
  * @apiDescription 用户注册

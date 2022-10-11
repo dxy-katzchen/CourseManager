@@ -6,6 +6,7 @@ const {
   sendEmail,
   varify,
   resetPwd,
+  getCaptcha
 } = require("../router_handler/user");
 const {
   user_register_schema,
@@ -13,9 +14,11 @@ const {
   login_uid_schema,
   lostpwd_send_email,
   lostpwd_reset_pwd,
+
 } = require("../schema/user");
 
 const router = express.Router();
+router.get("/captcha",getCaptcha)
 
 router.post("/register", expressJoi(user_register_schema), register);
 
