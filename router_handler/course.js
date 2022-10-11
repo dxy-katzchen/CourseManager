@@ -1,10 +1,7 @@
-const { result } = require("@hapi/joi/lib/base");
-const { type } = require("express/lib/response");
-const res = require("express/lib/response");
 const { query } = require("../db");
 
 const { removeEmpty } = require("../utils/removeEmpty");
-
+const { concatSqlStr } = require("../utils/concatSqlStr");
 /**
  * @api {post} /course/create 管理员创建课程(Admin)
  * @apiDescription 管理员创建课程
@@ -167,10 +164,12 @@ exports.updateCourse = async (req, res) => {
  */
 exports.getCourseList = async (req, res) => {
   let sql = "select * from course";
-  const { pageSize, pageCurr, ...queryInfo } = req.body;
+  let { pageSize, pageCurr, ...queryInfo } = req.body;
   const start = (pageCurr - 1) * pageSize; //起始位置
   try {
     let result = await query(sql);
+    //过滤为空字符串,null和undefined的属性
+    queryInfo = removeEmpty(queryInfo);
     if (JSON.stringify(queryInfo) == "{}")
       return res.send({
         status: 0,
@@ -178,30 +177,11 @@ exports.getCourseList = async (req, res) => {
         data: result,
       });
     sql += " where";
-    let obj = { sql };
-    //难点,亮点,动态拼接sql字符串
-    obj.addSql = function (currvar) {
-      if (currvar in queryInfo) {
-        if (this.sql.split("=").length > this.sql.split("and").length) {
-          this.sql += " and";
-        }
-        if (typeof queryInfo[currvar] === "string") {
-          //如果是字符串类型的数据需要加单引号
-          this.sql += " " + currvar + "=" + "'" + queryInfo[currvar] + "'";
-        } else {
-          this.sql += " " + currvar + "=" + queryInfo[currvar];
-        }
-      }
-      return obj;
-    };
 
-    obj
-      .addSql("cname")
-      .addSql("tname")
-      .addSql("cid")
-      .addSql("is_open")
-      .addSql("type");
-    sql = obj.sql;
+    let attrArr = ["cname", "tname", "cid", "is_open", "type"];
+    //难点,亮点,动态拼接sql字符串
+    sql = await concatSqlStr(sql, attrArr, queryInfo);
+
     sql += " limit " + start + "," + pageSize;
 
     result = await query(sql);
@@ -210,7 +190,6 @@ exports.getCourseList = async (req, res) => {
       status: 0,
       message: "成功获取课程信息",
       data: result,
-      
     });
   } catch (error) {
     res.cc(error);
@@ -531,4 +510,3 @@ exports.getMyCourseList = async (req, res) => {
     res.cc(error);
   }
 };
-
