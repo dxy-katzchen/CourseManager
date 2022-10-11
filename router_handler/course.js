@@ -181,9 +181,8 @@ exports.getCourseList = async (req, res) => {
     let attrArr = ["cname", "tname", "cid", "is_open", "type"];
     //难点,亮点,动态拼接sql字符串
     sql = await concatSqlStr(sql, attrArr, queryInfo);
-
+    //分页处理
     sql += " limit " + start + "," + pageSize;
-
     result = await query(sql);
 
     res.send({
