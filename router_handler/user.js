@@ -12,7 +12,7 @@ const randomFn = () =>
   Array.from({ length: 6 }, (_) => Math.floor(Math.random() * 10)).join("");
 /**
  * @api {get} /users/captcha 自然人验证
- * @apiDescription 自然人验证
+ * @apiDescription 自然人验证,发给前台一个svg,一个验证码内容
  * @apiName getCaptcha
  * @apiGroup User
 
