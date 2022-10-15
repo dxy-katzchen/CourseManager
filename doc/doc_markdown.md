@@ -1,22 +1,55 @@
 <a name="top"></a>
-
 # CourseManager课程管理系统接口文档 v1.0.0
 
 课程管理系统接口文档
 
 # Table of contents
 
-[toc]
+- [Course](#Course)
+  - [根据类型获取课程列表(common)](#根据类型获取课程列表(common))
+  - [根据cid删除课程(Admin)](#根据cid删除课程(Admin))
+  - [管理员创建课程(Admin)](#管理员创建课程(Admin))
+  - [管理员更新课程信息(Admin)](#管理员更新课程信息(Admin))
+- [CourseStudent](#CourseStudent)
+  - [学生给这门课程打分(Stu)](#学生给这门课程打分(Stu))
+  - [学生根据cid选课(Stu)](#学生根据cid选课(Stu))
+- [CourseTeacher](#CourseTeacher)
+  - [给我的学生打分(Teacher)](#给我的学生打分(Teacher))
+  - [获取我的学生列表(Teacher)](#获取我的学生列表(Teacher))
+  - [获取我教的课程列表(Teacher)](#获取我教的课程列表(Teacher))
+- [studentManage](#studentManage)
+  - [创建文章(Admin)](#创建文章(Admin))
+  - [根据类型获取文章列表](#根据类型获取文章列表)
+  - [根据mid获取文章详情](#根据mid获取文章详情)
+  - [根据mid将文章放入回收站(Admin)](#根据mid将文章放入回收站(Admin))
+  - [根据mid删除回收站内的文章(Admin)](#根据mid删除回收站内的文章(Admin))
+  - [更新文章信息(Admin)](#更新文章信息(Admin))
+  - [获取回收站文章列表(Admin)](#获取回收站文章列表(Admin))
+- [User](#User)
+  - [登录](#登录)
+  - [发送验证码](#发送验证码)
+  - [验证用户邮箱](#验证用户邮箱)
+  - [重置密码](#重置密码)
+  - [注册](#注册)
+  - [自然人验证](#自然人验证)
+- [UserInfo](#UserInfo)
+  - [查询用户基本信息](#查询用户基本信息)
+  - [修改用户基本信息](#修改用户基本信息)
+  - [修改用户密码](#修改用户密码)
+- [UserPage](#UserPage)
+  - [创建用户主页](#创建用户主页)
+  - [更新用户主页信息](#更新用户主页信息)
+  - [获取用户主页信息](#获取用户主页信息)
 
 ___
 
 
-# Course
+# <a name='Course'></a> Course
 
-## 根据类型获取课程列表(common)
- 
+## <a name='根据类型获取课程列表(common)'></a> 根据类型获取课程列表(common)
+[Back to top](#top)
 
-按条件查询课程的公开信息(common),可以根据cname,tname,cid,is_open筛选,没传就是全部
+<p>按条件查询课程的公开信息(common),可以根据cname,tname,cid,is_open筛选,没传就是全部</p>
 
 ```
 GET /course/getCourseList
@@ -32,18 +65,17 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| pageSize | `int` | 一页请求多少条数据,必填 |
-| pageCurr | `int` | 现在是多少页,必填 |
-| type | `int` | 课程类型,1--必修,2--限选,3--选修,选填 |
-| tname | `string` | 教师名称,选填 |
-| cname | `string` | 课程名称,选填 |
-| is_open | `int` | 是否开放,0--未开放选课,1--开放选课,选填 |
-| cid | `int` | 课程id,选填 |
+| pageSize | `int` | <p>一页请求多少条数据,必填</p> |
+| pageCurr | `int` | <p>现在是多少页,必填</p> |
+| type | `int` | <p>课程类型,1--必修,2--限选,3--选修,选填</p> |
+| tname | `string` | <p>教师名称,选填</p> |
+| cname | `string` | <p>课程名称,选填</p> |
+| is_open | `int` | <p>是否开放,0--未开放选课,1--开放选课,选填</p> |
+| cid | `int` | <p>课程id,选填</p> |
 
 ### Examples
 
@@ -84,10 +116,10 @@ Header-Example:
 }
 ```
 
-## 根据cid删除课程(Admin)
- 
+## <a name='根据cid删除课程(Admin)'></a> 根据cid删除课程(Admin)
+[Back to top](#top)
 
-根据cid删除课程,必须有管理员权限
+<p>根据cid删除课程,必须有管理员权限</p>
 
 ```
 POST /course/delete
@@ -103,12 +135,11 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| cid | `int` | 课程id,必填 |
+| cid | `int` | <p>课程id,必填</p> |
 
 ### Examples
 
@@ -132,10 +163,10 @@ Header-Example:
 }
 ```
 
-## 管理员创建课程(Admin)
- 
+## <a name='管理员创建课程(Admin)'></a> 管理员创建课程(Admin)
+[Back to top](#top)
 
-管理员创建课程
+<p>管理员创建课程</p>
 
 ```
 POST /course/create
@@ -151,16 +182,15 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| is_open | `number` | 是否开放选课,0表示未开放,1表示开放,必填_Allowed values: 0,1_ |
-| cname | `string` | 课程名称,必填 |
-| credit | `number` | 课程学分 必须是大于1的整数,必填_Size range: 1.._<br> |
-| type | `number` | 课程类型 1--必修课,2--限选课,3--选修课,必填_Size range: 1..3_<br> |
-| tid | `string` | 任课老师工号,必填 |
+| is_open | `number` | <p>是否开放选课,0表示未开放,1表示开放,必填</p>_Allowed values: 0,1_ |
+| cname | `string` | <p>课程名称,必填</p> |
+| credit | `number` | <p>课程学分 必须是大于1的整数,必填</p>_Size range: 1.._<br> |
+| type | `number` | <p>课程类型 1--必修课,2--限选课,3--选修课,必填</p>_Size range: 1..3_<br> |
+| tid | `string` | <p>任课老师工号,必填</p> |
 
 ### Examples
 
@@ -174,6 +204,7 @@ Header-Example:
 }
 ```
 
+
 ### Success response example
 
 #### Success response example - `返回内容:`
@@ -186,10 +217,10 @@ Header-Example:
 }
 ```
 
-## 管理员更新课程信息(Admin)
- 
+## <a name='管理员更新课程信息(Admin)'></a> 管理员更新课程信息(Admin)
+[Back to top](#top)
 
-管理员更新课程信息(Admin),可以用作列表更新,因为可以更新单个属性
+<p>管理员更新课程信息(Admin),可以用作列表更新,因为可以更新单个属性</p>
 
 ```
 POST /course/update
@@ -205,17 +236,16 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| cid | `number` | 课程id,必填 |
-| is_open | `number` | 是否开放选课,0表示未开放,1表示开放,选填_Allowed values: 0,1_ |
-| cname | `string` | 课程名称,选填 |
-| credit | `number` | 课程学分 必须是大于1的整数,选填_Size range: 1.._<br> |
-| type | `number` | 课程类型 1--必修课,2--限选课,3--选修课,选填_Size range: 1..3_<br> |
-| tid | `string` | 任课老师工号,选填 |
+| cid | `number` | <p>课程id,必填</p> |
+| is_open | `number` | <p>是否开放选课,0表示未开放,1表示开放,选填</p>_Allowed values: 0,1_ |
+| cname | `string` | <p>课程名称,选填</p> |
+| credit | `number` | <p>课程学分 必须是大于1的整数,选填</p>_Size range: 1.._<br> |
+| type | `number` | <p>课程类型 1--必修课,2--限选课,3--选修课,选填</p>_Size range: 1..3_<br> |
+| tid | `string` | <p>任课老师工号,选填</p> |
 
 ### Examples
 
@@ -242,12 +272,12 @@ Header-Example:
 }
 ```
 
-# CourseStudent
+# <a name='CourseStudent'></a> CourseStudent
 
-## 学生给这门课程打分(Stu)
- 
+## <a name='学生给这门课程打分(Stu)'></a> 学生给这门课程打分(Stu)
+[Back to top](#top)
 
-学生给这门课程打分
+<p>学生给这门课程打分</p>
 
 ```
 POST /course/student/evaluste
@@ -263,13 +293,12 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| cid | `int` | 课程id,必填 |
-| ev_score | `int` | 学生给该课程打的分数,可以打1-100分,必填_Size range: 1...100_<br> |
+| cid | `int` | <p>课程id,必填</p> |
+| ev_score | `int` | <p>学生给该课程打的分数,可以打1-100分,必填</p>_Size range: 1...100_<br> |
 
 ### Examples
 
@@ -294,10 +323,10 @@ Header-Example:
 }
 ```
 
-## 学生根据cid选课(Stu)
- 
+## <a name='学生根据cid选课(Stu)'></a> 学生根据cid选课(Stu)
+[Back to top](#top)
 
-学生根据cid选课(Stu)
+<p>学生根据cid选课(Stu)</p>
 
 ```
 POST /course/student/choose
@@ -313,12 +342,11 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| cid | `int` | 课程id,必填 |
+| cid | `int` | <p>课程id,必填</p> |
 
 ### Examples
 
@@ -342,12 +370,12 @@ Header-Example:
 }
 ```
 
-# CourseTeacher
+# <a name='CourseTeacher'></a> CourseTeacher
 
-## 给我的学生打分(Teacher)
- 
+## <a name='给我的学生打分(Teacher)'></a> 给我的学生打分(Teacher)
+[Back to top](#top)
 
-给我的学生打某课程的分(Teacher)
+<p>给我的学生打某课程的分(Teacher)</p>
 
 ```
 POST /course/teacher/mark
@@ -363,14 +391,13 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| cid | `int` | 课程id,必填 |
-| stu_id | `string` | 学生学号,必填 |
-| score | `int` | 老师给学生的分数,1-100之间的整数,必填 |
+| cid | `int` | <p>课程id,必填</p> |
+| stu_id | `string` | <p>学生学号,必填</p> |
+| score | `int` | <p>老师给学生的分数,1-100之间的整数,必填</p> |
 
 ### Examples
 
@@ -396,10 +423,10 @@ Header-Example:
 }
 ```
 
-## 获取我的学生列表(Teacher)
- 
+## <a name='获取我的学生列表(Teacher)'></a> 获取我的学生列表(Teacher)
+[Back to top](#top)
 
-根据cid获取我教的课程的学生列表(Teacher)
+<p>根据cid获取我教的课程的学生列表(Teacher)</p>
 
 ```
 POST /course/teacher/getCourseStuList
@@ -415,12 +442,11 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| cid | `int` | 课程id,必填 |
+| cid | `int` | <p>课程id,必填</p> |
 
 ### Examples
 
@@ -454,10 +480,10 @@ Header-Example:
 }
 ```
 
-## 获取我教的课程列表(Teacher)
- 
+## <a name='获取我教的课程列表(Teacher)'></a> 获取我教的课程列表(Teacher)
+[Back to top](#top)
 
-获取我教的课程列表(Teacher)
+<p>获取我教的课程列表(Teacher)</p>
 
 ```
 POST /course/teacher/getMyCourseList
@@ -472,7 +498,6 @@ Header-Example:
   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
 }
 ```
-
 
 ### Success response example
 
@@ -516,12 +541,12 @@ Header-Example:
 }
 ```
 
-# studentManage
+# <a name='studentManage'></a> studentManage
 
-## 创建文章(Admin)
- 
+## <a name='创建文章(Admin)'></a> 创建文章(Admin)
+[Back to top](#top)
 
-创建学工管理公告，什么都不用发
+<p>创建学工管理公告，什么都不用发</p>
 
 ```
 POST /manage/create
@@ -536,7 +561,6 @@ Header-Example:
   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
 }
 ```
-
 
 ### Success response example
 
@@ -553,10 +577,10 @@ Header-Example:
 }
 ```
 
-## 根据类型获取文章列表
- 
+## <a name='根据类型获取文章列表'></a> 根据类型获取文章列表
+[Back to top](#top)
 
-根据类型获取学工管理文章列表,并按照最后编辑时间降序分页(最后编辑的在顶部)
+<p>根据类型获取学工管理文章列表,并按照最后编辑时间降序分页(最后编辑的在顶部)</p>
 
 ```
 GET /manage/getList
@@ -572,14 +596,13 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| type | `int` | 文章类型,1--社会实践,2--课外活动,3--研究成果,必填 |
-| pageSize | `int` | 一页请求多少条数据,必填 |
-| pageCurr | `iny` | 现在是多少页,必填 |
+| type | `int` | <p>文章类型,1--社会实践,2--课外活动,3--研究成果,必填</p> |
+| pageSize | `int` | <p>一页请求多少条数据,必填</p> |
+| pageCurr | `iny` | <p>现在是多少页,必填</p> |
 
 ### Examples
 
@@ -627,10 +650,10 @@ Header-Example:
 }
 ```
 
-## 根据mid获取文章详情
- 
+## <a name='根据mid获取文章详情'></a> 根据mid获取文章详情
+[Back to top](#top)
 
-根据mid获取文章详情,无论有没有放入回收站都能看
+<p>根据mid获取文章详情,无论有没有放入回收站都能看</p>
 
 ```
 GET /manage/getPageDetails
@@ -646,12 +669,11 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| mid | `int` | 文章id,必填 |
+| mid | `int` | <p>文章id,必填</p> |
 
 ### Examples
 
@@ -687,10 +709,10 @@ Header-Example:
 }
 ```
 
-## 根据mid将文章放入回收站(Admin)
- 
+## <a name='根据mid将文章放入回收站(Admin)'></a> 根据mid将文章放入回收站(Admin)
+[Back to top](#top)
 
-根据mid将文章放入回收站
+<p>根据mid将文章放入回收站</p>
 
 ```
 POST /manage/toBin
@@ -706,12 +728,11 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| mid | `int` | 文章id,必填 |
+| mid | `int` | <p>文章id,必填</p> |
 
 ### Examples
 
@@ -735,10 +756,10 @@ Header-Example:
 }
 ```
 
-## 根据mid删除回收站内的文章(Admin)
- 
+## <a name='根据mid删除回收站内的文章(Admin)'></a> 根据mid删除回收站内的文章(Admin)
+[Back to top](#top)
 
-根据mid删除回收站内的文章,必须有管理员权限
+<p>根据mid删除回收站内的文章,必须有管理员权限</p>
 
 ```
 POST /manage/delete
@@ -754,12 +775,11 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| mid | `int` | 文章id,必填 |
+| mid | `int` | <p>文章id,必填</p> |
 
 ### Examples
 
@@ -783,10 +803,10 @@ Header-Example:
 }
 ```
 
-## 更新文章信息(Admin)
- 
+## <a name='更新文章信息(Admin)'></a> 更新文章信息(Admin)
+[Back to top](#top)
 
-更新学工管理文章信息
+<p>更新学工管理文章信息</p>
 
 ```
 POST /manage/update
@@ -802,17 +822,16 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| mid | `int` | 文章id,必填 |
-| type | `int` | 文章类型,1--社会实践,2--课外活动,3--研究成果,选填 |
-| title | `string` | 题目,选填 |
-| content | `string` | 内容,选填 |
-| author | `string` | 作者,选填 |
-| banner_pic | `string` | 照片地址,选填 |
+| mid | `int` | <p>文章id,必填</p> |
+| type | `int` | <p>文章类型,1--社会实践,2--课外活动,3--研究成果,选填</p> |
+| title | `string` | <p>题目,选填</p> |
+| content | `string` | <p>内容,选填</p> |
+| author | `string` | <p>作者,选填</p> |
+| banner_pic | `string` | <p>照片地址,选填</p> |
 
 ### Examples
 
@@ -841,10 +860,10 @@ Header-Example:
 }
 ```
 
-## 获取回收站文章列表(Admin)
- 
+## <a name='获取回收站文章列表(Admin)'></a> 获取回收站文章列表(Admin)
+[Back to top](#top)
 
-获取学工管理回收站文章列表,并按照最后编辑时间降序分页(最后编辑的在顶部)
+<p>获取学工管理回收站文章列表,并按照最后编辑时间降序分页(最后编辑的在顶部)</p>
 
 ```
 GET /manage/getBinList
@@ -860,13 +879,12 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| pageSize | `int` | 一页请求多少条数据,必填 |
-| pageCurr | `iny` | 现在是多少页,必填 |
+| pageSize | `int` | <p>一页请求多少条数据,必填</p> |
+| pageCurr | `iny` | <p>现在是多少页,必填</p> |
 
 ### Examples
 
@@ -919,24 +937,23 @@ Header-Example:
 }
 ```
 
-# User
+# <a name='User'></a> User
 
-## 登录
- 
+## <a name='登录'></a> 登录
+[Back to top](#top)
 
-用户登录
+<p>用户登录</p>
 
 ```
-POST /users/login
+POST /user/login
 ```
-
 
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| uid | `string` | 学/工号 ,只能12位_Size range: 12_<br> |
-| password | `string` | 密码,可以有数字和字母_Size range: 6..12_<br> |
+| uid | `string` | <p>学/工号 ,只能12位</p>_Size range: 12_<br> |
+| password | `string` | <p>密码,可以有数字和字母</p>_Size range: 6..12_<br> |
 
 ### Examples
 
@@ -963,21 +980,20 @@ POST /users/login
 }
 ```
 
-## 发送验证码
- 
+## <a name='发送验证码'></a> 发送验证码
+[Back to top](#top)
 
-向用户邮箱发送有验证码的邮件
+<p>向用户邮箱发送有验证码的邮件</p>
 
 ```
-POST /users/lostPwd/sendEmail
+POST /user/lostPwd/sendEmail
 ```
-
 
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| email | `string` | 邮箱,必须符合邮箱格式 |
+| email | `string` | <p>邮箱,必须符合邮箱格式</p> |
 
 ### Examples
 
@@ -1003,22 +1019,21 @@ POST /users/lostPwd/sendEmail
 }
 ```
 
-## 验证用户邮箱
- 
+## <a name='验证用户邮箱'></a> 验证用户邮箱
+[Back to top](#top)
 
-用户发送验证码找回密码
+<p>用户发送验证码找回密码</p>
 
 ```
-POST /users/lostPwd/varify
+POST /user/lostPwd/varify
 ```
-
 
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| email | `string` | 邮箱,必须符合邮箱格式 |
-| checkCode | `string` | 验证码,必须6位_Size range: 6_<br> |
+| email | `string` | <p>邮箱,必须符合邮箱格式</p> |
+| checkCode | `string` | <p>验证码,必须6位</p>_Size range: 6_<br> |
 
 ### Examples
 
@@ -1043,23 +1058,22 @@ POST /users/lostPwd/varify
 }
 ```
 
-## 重置密码
- 
+## <a name='重置密码'></a> 重置密码
+[Back to top](#top)
 
-用户重置密码
+<p>用户重置密码</p>
 
 ```
-POST /users/lostPwd/resetPwd
+POST /user/lostPwd/resetPwd
 ```
-
 
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| email | `string` | 邮箱,必须符合邮箱格式 |
-| password | `string` | 密码,可以有数字和字母_Size range: 6..12_<br> |
-| passwordRepeat | `string` | 确认输入密码,必须和password值相同_Size range: 6..12_<br> |
+| email | `string` | <p>邮箱,必须符合邮箱格式</p> |
+| password | `string` | <p>密码,可以有数字和字母</p>_Size range: 6..12_<br> |
+| passwordRepeat | `string` | <p>确认输入密码,必须和password值相同</p>_Size range: 6..12_<br> |
 
 ### Examples
 
@@ -1085,25 +1099,24 @@ POST /users/lostPwd/resetPwd
 }
 ```
 
-## 注册
- 
+## <a name='注册'></a> 注册
+[Back to top](#top)
 
-用户注册
+<p>用户注册</p>
 
 ```
-POST /users/register
+POST /user/register
 ```
-
 
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| username | `string` | 用户名_Size range: 1..12_<br> |
-| password | `string` | 密码,可以有数字和字母_Size range: 6..12_<br> |
-| uid | `string` | 学/工号 ,只能12位_Size range: 12_<br> |
-| email | `string` | 邮箱,必须符合邮箱格式 |
-| role | `number` | 身份,1为学生,2为老师,3为管理员_Default value: 1_<br>_Allowed values: 1,2,3_ |
+| username | `string` | <p>用户名</p>_Size range: 1..12_<br> |
+| password | `string` | <p>密码,可以有数字和字母</p>_Size range: 6..12_<br> |
+| uid | `string` | <p>学/工号 ,只能12位</p>_Size range: 12_<br> |
+| email | `string` | <p>邮箱,必须符合邮箱格式</p> |
+| role | `number` | <p>身份,1为学生,2为老师,3为管理员</p>_Default value: 1_<br>_Allowed values: 1,2,3_ |
 
 ### Examples
 
@@ -1131,15 +1144,14 @@ POST /users/register
 }
 ```
 
-## 自然人验证
- 
+## <a name='自然人验证'></a> 自然人验证
+[Back to top](#top)
 
-自然人验证,发给前台一个svg,一个验证码内容
+<p>自然人验证,发给前台一个svg,一个验证码内容</p>
 
 ```
-GET /users/captcha
+GET /user/captcha
 ```
-
 
 ### Success response example
 
@@ -1149,17 +1161,20 @@ GET /users/captcha
 {
    "status": 0,
    "message": "成功获取验证码",
-   "text": "502f",
+   "data":{
+"text": "502f",
    "svg_img": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"150\" height=\"50\" viewBox=\"0,0,150,..."
+   }
+  
 }
 ```
 
-# UserInfo
+# <a name='UserInfo'></a> UserInfo
 
-## 查询用户基本信息
- 
+## <a name='查询用户基本信息'></a> 查询用户基本信息
+[Back to top](#top)
 
-查询用户基本信息
+<p>查询用户基本信息</p>
 
 ```
 GET /my/userinfo
@@ -1174,7 +1189,6 @@ Header-Example:
   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
 }
 ```
-
 
 ### Success response example
 
@@ -1195,10 +1209,10 @@ Header-Example:
 }
 ```
 
-## 修改用户基本信息
- 
+## <a name='修改用户基本信息'></a> 修改用户基本信息
+[Back to top](#top)
 
-修改用户基本信息
+<p>修改用户基本信息</p>
 
 ```
 POST /my/userinfo
@@ -1214,14 +1228,13 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| username | `string` | 用户名_Size range: 1..12_<br> |
-| email | `string` | 邮箱,必须符合邮箱格式 |
-| avatar | `string` | 头像地址,可选 |
+| username | `string` | <p>用户名</p>_Size range: 1..12_<br> |
+| email | `string` | <p>邮箱,必须符合邮箱格式</p> |
+| avatar | `string` | <p>头像地址,可选</p> |
 
 ### Examples
 
@@ -1248,10 +1261,10 @@ Header-Example:
 }
 ```
 
-## 修改用户密码
- 
+## <a name='修改用户密码'></a> 修改用户密码
+[Back to top](#top)
 
-修改用户密码,之所以这个接口单独写,是为了防止token盗用而修改密码的情况
+<p>修改用户密码,之所以这个接口单独写,是为了防止token盗用而修改密码的情况</p>
 
 ```
 POST /my/updatepwd
@@ -1267,13 +1280,12 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| oldPwd | `string` | 旧密码,原来的密码,6-12位数字和字母的组合_Size range: 6..12_<br> |
-| newPwd | `string` | 新密码,和旧密码不能一样,格式同上_Size range: 6..12_<br> |
+| oldPwd | `string` | <p>旧密码,原来的密码,6-12位数字和字母的组合</p>_Size range: 6..12_<br> |
+| newPwd | `string` | <p>新密码,和旧密码不能一样,格式同上</p>_Size range: 6..12_<br> |
 
 ### Examples
 
@@ -1298,12 +1310,12 @@ Header-Example:
 }
 ```
 
-# UserPage
+# <a name='UserPage'></a> UserPage
 
-## 创建用户主页
- 
+## <a name='创建用户主页'></a> 创建用户主页
+[Back to top](#top)
 
-创建用户主页，什么都不用发
+<p>创建用户主页，什么都不用发</p>
 
 ```
 POST /userpage/create
@@ -1319,7 +1331,6 @@ Header-Example:
 }
 ```
 
-
 ### Success response example
 
 #### Success response example - `返回内容:`
@@ -1334,10 +1345,10 @@ Header-Example:
 }
 ```
 
-## 更新用户主页信息
- 
+## <a name='更新用户主页信息'></a> 更新用户主页信息
+[Back to top](#top)
 
-更新用户主页信息
+<p>更新用户主页信息</p>
 
 ```
 POST /userpage/update
@@ -1353,18 +1364,17 @@ Header-Example:
 }
 ```
 
-
 ### Request Body
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| upid | `int` | 用户主页id,必填 |
-| comment | `string` | 简介,选填(学生,教师) |
-| photo | `string` | 照片地址,选填(学生,教师) |
-| blog | `string` | 博客地址,选填(学生) |
-| book | `string` | 论文著作,选填(教师) |
-| search | `string` | 研究方向,选填(教师) |
-| teachcourse | `string` | 教授课程,选填(教师) |
+| upid | `int` | <p>用户主页id,必填</p> |
+| comment | `string` | <p>简介,选填(学生,教师)</p> |
+| photo | `string` | <p>照片地址,选填(学生,教师)</p> |
+| blog | `string` | <p>博客地址,选填(学生)</p> |
+| book | `string` | <p>论文著作,选填(教师)</p> |
+| search | `string` | <p>研究方向,选填(教师)</p> |
+| teachcourse | `string` | <p>教授课程,选填(教师)</p> |
 
 ### Examples
 
@@ -1394,10 +1404,10 @@ teachcourse: "数据结构与算法,计算机引论",
 }
 ```
 
-## 获取用户主页信息
- 
+## <a name='获取用户主页信息'></a> 获取用户主页信息
+[Back to top](#top)
 
-获取用户主页信息，什么都不用发
+<p>获取用户主页信息，什么都不用发</p>
 
 ```
 GET /userpage/info
@@ -1412,7 +1422,6 @@ Header-Example:
   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
 }
 ```
-
 
 ### Success response example
 

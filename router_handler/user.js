@@ -11,7 +11,7 @@ const checkCodeMap = new Map();
 const randomFn = () =>
   Array.from({ length: 6 }, (_) => Math.floor(Math.random() * 10)).join("");
 /**
- * @api {get} /users/captcha 自然人验证
+ * @api {get} /user/captcha 自然人验证
  * @apiDescription 自然人验证,发给前台一个svg,一个验证码内容
  * @apiName getCaptcha
  * @apiGroup User
@@ -49,7 +49,7 @@ exports.getCaptcha = async (req, res) => {
   }
 };
 /**
- * @api {post} /users/register 注册
+ * @api {post} /user/register 注册
  * @apiDescription 用户注册
  * @apiName register
  * @apiGroup User
@@ -95,7 +95,7 @@ exports.register = async (req, res) => {
   }
 };
 /**
- * @api {post} /users/login 登录
+ * @api {post} /user/login 登录
  * @apiDescription 用户登录
  * @apiName login
  * @apiGroup User
@@ -144,7 +144,7 @@ exports.login = async (req, res) => {
 };
 
 /**
- * @api {post} /users/lostPwd/sendEmail 发送验证码
+ * @api {post} /user/lostPwd/sendEmail 发送验证码
  * @apiDescription 向用户邮箱发送有验证码的邮件
  * @apiName sendEmail
  * @apiGroup User
@@ -186,7 +186,7 @@ exports.sendEmail = async (req, res) => {
 };
 
 /**
- * @api {post} /users/lostPwd/varify 验证用户邮箱
+ * @api {post} /user/lostPwd/varify 验证用户邮箱
  * @apiDescription 用户发送验证码找回密码
  * @apiName varify
  * @apiGroup User
@@ -222,7 +222,7 @@ exports.varify = async (req, res) => {
 };
 
 /**
- * @api {post} /users/lostPwd/resetPwd 重置密码
+ * @api {post} /user/lostPwd/resetPwd 重置密码
  * @apiDescription 用户重置密码
  * @apiName resetPwd
  * @apiGroup User
