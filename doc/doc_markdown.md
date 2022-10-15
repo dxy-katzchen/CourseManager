@@ -1,45 +1,12 @@
 <a name="top"></a>
+
 # CourseManager课程管理系统接口文档 v1.0.0
 
 课程管理系统接口文档
 
 # Table of contents
 
-- [Course](#markdown-header-course)
-  - [根据类型获取课程列表(common)](#markdown-header-根据类型获取课程列表(common))
-  - [根据cid删除课程(Admin)](#markdown-header-根据cid删除课程(admin))
-  - [管理员创建课程(Admin)](#markdown-header-管理员创建课程(admin))
-  - [管理员更新课程信息(Admin)](#markdown-header-管理员更新课程信息(admin))
-- [CourseStudent](#markdown-header-coursestudent)
-  - [学生给这门课程打分(Stu)](#markdown-header-学生给这门课程打分(stu))
-  - [学生根据cid选课(Stu)](#markdown-header-学生根据cid选课(stu))
-- [CourseTeacher](#markdown-header-courseteacher)
-  - [给我的学生打分(Teacher)](#markdown-header-给我的学生打分(teacher))
-  - [获取我的学生列表(Teacher)](#markdown-header-获取我的学生列表(teacher))
-  - [获取我教的课程列表(Teacher)](#markdown-header-获取我教的课程列表(teacher))
-- [studentManage](#markdown-header-studentmanage)
-  - [创建文章(Admin)](#markdown-header-创建文章(admin))
-  - [根据类型获取文章列表](#markdown-header-根据类型获取文章列表)
-  - [根据mid获取文章详情](#markdown-header-根据mid获取文章详情)
-  - [根据mid将文章放入回收站(Admin)](#markdown-header-根据mid将文章放入回收站(admin))
-  - [根据mid删除回收站内的文章(Admin)](#markdown-header-根据mid删除回收站内的文章(admin))
-  - [更新文章信息(Admin)](#markdown-header-更新文章信息(admin))
-  - [获取回收站文章列表(Admin)](#markdown-header-获取回收站文章列表(admin))
-- [User](#markdown-header-user)
-  - [登录](#markdown-header-登录)
-  - [发送验证码](#markdown-header-发送验证码)
-  - [验证用户邮箱](#markdown-header-验证用户邮箱)
-  - [重置密码](#markdown-header-重置密码)
-  - [注册](#markdown-header-注册)
-  - [自然人验证](#markdown-header-自然人验证)
-- [UserInfo](#markdown-header-userinfo)
-  - [查询用户基本信息](#markdown-header-查询用户基本信息)
-  - [修改用户基本信息](#markdown-header-修改用户基本信息)
-  - [修改用户密码](#markdown-header-修改用户密码)
-- [UserPage](#markdown-header-userpage)
-  - [创建用户主页](#markdown-header-创建用户主页)
-  - [更新用户主页信息](#markdown-header-更新用户主页信息)
-  - [获取用户主页信息](#markdown-header-获取用户主页信息)
+[toc]
 
 ___
 
@@ -47,7 +14,7 @@ ___
 # Course
 
 ## 根据类型获取课程列表(common)
-[Back to top](#top)
+ 
 
 按条件查询课程的公开信息(common),可以根据cname,tname,cid,is_open筛选,没传就是全部
 
@@ -118,7 +85,7 @@ Header-Example:
 ```
 
 ## 根据cid删除课程(Admin)
-[Back to top](#top)
+ 
 
 根据cid删除课程,必须有管理员权限
 
@@ -166,7 +133,7 @@ Header-Example:
 ```
 
 ## 管理员创建课程(Admin)
-[Back to top](#top)
+ 
 
 管理员创建课程
 
@@ -207,7 +174,6 @@ Header-Example:
 }
 ```
 
-
 ### Success response example
 
 #### Success response example - `返回内容:`
@@ -221,7 +187,7 @@ Header-Example:
 ```
 
 ## 管理员更新课程信息(Admin)
-[Back to top](#top)
+ 
 
 管理员更新课程信息(Admin),可以用作列表更新,因为可以更新单个属性
 
@@ -279,7 +245,7 @@ Header-Example:
 # CourseStudent
 
 ## 学生给这门课程打分(Stu)
-[Back to top](#top)
+ 
 
 学生给这门课程打分
 
@@ -329,7 +295,7 @@ Header-Example:
 ```
 
 ## 学生根据cid选课(Stu)
-[Back to top](#top)
+ 
 
 学生根据cid选课(Stu)
 
@@ -379,7 +345,7 @@ Header-Example:
 # CourseTeacher
 
 ## 给我的学生打分(Teacher)
-[Back to top](#top)
+ 
 
 给我的学生打某课程的分(Teacher)
 
@@ -431,7 +397,7 @@ Header-Example:
 ```
 
 ## 获取我的学生列表(Teacher)
-[Back to top](#top)
+ 
 
 根据cid获取我教的课程的学生列表(Teacher)
 
@@ -489,7 +455,7 @@ Header-Example:
 ```
 
 ## 获取我教的课程列表(Teacher)
-[Back to top](#top)
+ 
 
 获取我教的课程列表(Teacher)
 
@@ -553,7 +519,7 @@ Header-Example:
 # studentManage
 
 ## 创建文章(Admin)
-[Back to top](#top)
+ 
 
 创建学工管理公告，什么都不用发
 
@@ -588,7 +554,7 @@ Header-Example:
 ```
 
 ## 根据类型获取文章列表
-[Back to top](#top)
+ 
 
 根据类型获取学工管理文章列表,并按照最后编辑时间降序分页(最后编辑的在顶部)
 
@@ -662,7 +628,7 @@ Header-Example:
 ```
 
 ## 根据mid获取文章详情
-[Back to top](#top)
+ 
 
 根据mid获取文章详情,无论有没有放入回收站都能看
 
@@ -722,7 +688,7 @@ Header-Example:
 ```
 
 ## 根据mid将文章放入回收站(Admin)
-[Back to top](#top)
+ 
 
 根据mid将文章放入回收站
 
@@ -770,7 +736,7 @@ Header-Example:
 ```
 
 ## 根据mid删除回收站内的文章(Admin)
-[Back to top](#top)
+ 
 
 根据mid删除回收站内的文章,必须有管理员权限
 
@@ -818,7 +784,7 @@ Header-Example:
 ```
 
 ## 更新文章信息(Admin)
-[Back to top](#top)
+ 
 
 更新学工管理文章信息
 
@@ -876,7 +842,7 @@ Header-Example:
 ```
 
 ## 获取回收站文章列表(Admin)
-[Back to top](#top)
+ 
 
 获取学工管理回收站文章列表,并按照最后编辑时间降序分页(最后编辑的在顶部)
 
@@ -956,7 +922,7 @@ Header-Example:
 # User
 
 ## 登录
-[Back to top](#top)
+ 
 
 用户登录
 
@@ -998,7 +964,7 @@ POST /users/login
 ```
 
 ## 发送验证码
-[Back to top](#top)
+ 
 
 向用户邮箱发送有验证码的邮件
 
@@ -1038,7 +1004,7 @@ POST /users/lostPwd/sendEmail
 ```
 
 ## 验证用户邮箱
-[Back to top](#top)
+ 
 
 用户发送验证码找回密码
 
@@ -1078,7 +1044,7 @@ POST /users/lostPwd/varify
 ```
 
 ## 重置密码
-[Back to top](#top)
+ 
 
 用户重置密码
 
@@ -1120,7 +1086,7 @@ POST /users/lostPwd/resetPwd
 ```
 
 ## 注册
-[Back to top](#top)
+ 
 
 用户注册
 
@@ -1166,7 +1132,7 @@ POST /users/register
 ```
 
 ## 自然人验证
-[Back to top](#top)
+ 
 
 自然人验证,发给前台一个svg,一个验证码内容
 
@@ -1191,7 +1157,7 @@ GET /users/captcha
 # UserInfo
 
 ## 查询用户基本信息
-[Back to top](#top)
+ 
 
 查询用户基本信息
 
@@ -1230,7 +1196,7 @@ Header-Example:
 ```
 
 ## 修改用户基本信息
-[Back to top](#top)
+ 
 
 修改用户基本信息
 
@@ -1283,7 +1249,7 @@ Header-Example:
 ```
 
 ## 修改用户密码
-[Back to top](#top)
+ 
 
 修改用户密码,之所以这个接口单独写,是为了防止token盗用而修改密码的情况
 
@@ -1335,7 +1301,7 @@ Header-Example:
 # UserPage
 
 ## 创建用户主页
-[Back to top](#top)
+ 
 
 创建用户主页，什么都不用发
 
@@ -1369,7 +1335,7 @@ Header-Example:
 ```
 
 ## 更新用户主页信息
-[Back to top](#top)
+ 
 
 更新用户主页信息
 
@@ -1429,7 +1395,7 @@ teachcourse: "数据结构与算法,计算机引论",
 ```
 
 ## 获取用户主页信息
-[Back to top](#top)
+ 
 
 获取用户主页信息，什么都不用发
 

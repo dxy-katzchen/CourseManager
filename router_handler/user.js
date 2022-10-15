@@ -20,8 +20,11 @@ const randomFn = () =>
  {
     "status": 0,
     "message": "成功获取验证码",
-    "text": "502f",
+    "data":{
+ "text": "502f",
     "svg_img": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"150\" height=\"50\" viewBox=\"0,0,150,..."
+    }
+   
  }
  * @apiVersion 1.0.0
  */
@@ -35,8 +38,11 @@ exports.getCaptcha = async (req, res) => {
     res.send({
       status: 0,
       message: "成功获取验证码",
-      text,
-      svg_img,
+      data:{
+        text,
+        svg_img,
+      }
+      
     });
   } catch (error) {
     res.cc(error);
