@@ -49,15 +49,14 @@ exports.getUserInfo = async (req, res) => {
  *     {
  *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
  *     }
- * @apiBody {string{1..12}} username 用户名
- * @apiBody {string} email 邮箱,必须符合邮箱格式
+ * @apiBody {string{1..12}} username 用户名,可选
+ * @apiBody {string} email 邮箱,必须符合邮箱格式,可选
  * @apiBody {string} avatar 头像地址,可选
  * 
  * @apiExample {js} 请求示例:
  * {
  *     username:"dxxxxy",
  *     email:"55555@126.com",
- *     upid:1,//可选
  *     avatar:"https://sm.ms/image/8yBIwEGVKxNeadM"//可选
  * }
  * @apiSuccessExample {json} 返回内容:
