@@ -24,8 +24,9 @@ exports.createUserpage = async (req, res) => {
   const { uid, role } = req.user;
   //先查看该用户有没有主页,即user表中的upid字段是否为空
   let sql = "select upid from users where uid=?";
-  let result = query(sql, uid);
-  if (result) return res.cc("您已有用户主页,不能再次创建");
+  let result = await query(sql, uid);
+
+  if (result.upid) return res.cc("您已有用户主页,不能再次创建");
   //插入一行,只有用户的身份
   sql = "insert into userpage set type=?";
   try {
