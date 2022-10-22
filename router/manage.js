@@ -21,7 +21,7 @@ const {
 //按照类型获取学工管理列表
 router.post("/getList", expressJoi(get_list_schema), getManageList);
 //根据id获取文章详情,是否在回收站都能获取
-router.get("/getPageDetails", expressJoi(get_page_schema), getPageDetails);
+router.post("/getPageDetails", expressJoi(get_page_schema), getPageDetails);
 //创建学工管理文章(Admin)
 router.post("/create", createManagePage);
 //更新学工管理文章(Admin)
