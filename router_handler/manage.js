@@ -213,7 +213,7 @@ exports.intoBin = async (req, res) => {
   }
 };
 /**
- * @api {get} /manage/getPageDetails 根据mid获取文章详情
+ * @api {post} /manage/getPageDetails 根据mid获取文章详情
  * @apiDescription 根据mid获取文章详情,无论有没有放入回收站都能看
  * @apiName getPageDetails
  * @apiGroup studentManage
