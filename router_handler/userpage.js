@@ -140,7 +140,7 @@ exports.getPageInfo = async (req, res) => {
     res.send({
       status: 0,
       message: "获取主页信息成功！",
-      data: result,
+      data: result[0],
     });
   } catch (error) {
     res.cc(error);

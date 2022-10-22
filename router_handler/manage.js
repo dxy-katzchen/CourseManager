@@ -99,7 +99,7 @@ exports.updateManagePage = async (req, res) => {
 };
 
 /**
- * @api {get} /manage/getList 根据类型获取文章列表
+ * @api {post} /manage/getList 根据类型获取文章列表
  * @apiDescription 根据类型获取学工管理文章列表,并按照最后编辑时间降序分页(最后编辑的在顶部)
  * @apiName getManageList
  * @apiGroup studentManage
