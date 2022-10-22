@@ -32,7 +32,7 @@ exports.createManagePage = async (req, res) => {
     let result = await query(sql, uid, createTime);
     if (result.affectedRows !== 1) return res.cc("创建公告失败");
     const mid = result.insertId;
-    res.cc({
+    res.send({
       status: 0,
       message: "创建公告成功",
       mid,
