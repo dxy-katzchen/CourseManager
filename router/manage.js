@@ -29,7 +29,7 @@ router.post("/update", expressJoi(update_manage_schema), updateManagePage);
 //根据id删除学工管理文章,加入回收站(Admin)
 router.post("/toBin", expressJoi(get_page_schema), intoBin);
 //获取在回收站的文章列表(Admin)
-router.get("/getBinList", expressJoi(get_bin_list), getBinList);
+router.post("/getBinList", expressJoi(get_bin_list), getBinList);
 //删除文章(Admin)
 router.post('/delete', expressJoi(get_page_schema),deletePage)
 

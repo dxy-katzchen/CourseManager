@@ -124,6 +124,7 @@ exports.updateManagePage = async (req, res) => {
     "status": 0,
     "message": "获取成功",
     "is_lastPage": false,
+    "total": 3,
     "data_number": 3,
     "data": [
         {
@@ -152,15 +153,14 @@ exports.getManageList = async (req, res) => {
   //要在此间形成分页
   let { type, pageSize, pageCurr } = req.body;
   const start = (pageCurr - 1) * pageSize; //起始位置
-  
 
   try {
-    let sql='select * from stu_teach_manage where type=? and is_delete!=1'
-    let result=await query(sql,type)
-    let total=result.length
-     sql =
-    "select mid,title,edit_time,author from stu_teach_manage where type=? and is_delete!=1 order by edit_time desc limit ?,? ";
-     result = await query(sql, type, start, pageSize);
+    let sql = "select * from stu_teach_manage where type=? and is_delete!=1";
+    let result = await query(sql, type);
+    let total = result.length;
+    sql =
+      "select mid,title,edit_time,author from stu_teach_manage where type=? and is_delete!=1 order by edit_time desc limit ?,? ";
+    result = await query(sql, type, start, pageSize);
 
     let is_lastPage = result.length < pageSize ? true : false;
     res.send({
@@ -269,7 +269,7 @@ exports.getPageDetails = async (req, res) => {
   }
 };
 /**
- * @api {get} /manage/getBinList 获取回收站文章列表(Admin)
+ * @api {post} /manage/getBinList 获取回收站文章列表(Admin)
  * @apiDescription 获取学工管理回收站文章列表,并按照最后编辑时间降序分页(最后编辑的在顶部)
  * @apiName getBinList
  * @apiGroup studentManage
@@ -292,6 +292,7 @@ exports.getPageDetails = async (req, res) => {
     "status": 0,
     "message": "获取成功",
     "is_lastPage": true,
+    "total": 3,
     "data_number": 3,
     "data": [
         {
@@ -329,16 +330,21 @@ exports.getBinList = async (req, res) => {
   //要在此间形成分页
   let { pageSize, pageCurr } = req.body;
   const start = (pageCurr - 1) * pageSize; //起始位置
-  let sql =
-    "select mid,title,create_time,edit_time,author,type from stu_teach_manage where  is_delete=1 order by edit_time desc limit ?,? ";
 
   try {
-    let result = await query(sql, start, pageSize);
+    let sql = "select * from stu_teach_manage where  is_delete=1";
+    let result = await query(sql);
+    let total = result.length;
+    sql =
+      "select mid,title,create_time,edit_time,author,type from stu_teach_manage where  is_delete=1 order by edit_time desc limit ?,? ";
+
+    result = await query(sql, start, pageSize);
 
     let is_lastPage = result.length < pageSize ? true : false;
     res.send({
       status: 0,
       message: "获取成功",
+      total,
       is_lastPage,
       data_number: result.length,
       data: result,
@@ -383,7 +389,7 @@ exports.deletePage = async (req, res) => {
     sql = "delete from stu_teach_manage where mid=?";
     result = await query(sql, mid);
     if (result.affectedRows !== 1) return res.cc("删除失败");
-    res.cc("删除成功",0);
+    res.cc("删除成功", 0);
   } catch (error) {
     res.cc(error);
   }
