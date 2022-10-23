@@ -152,16 +152,21 @@ exports.getManageList = async (req, res) => {
   //要在此间形成分页
   let { type, pageSize, pageCurr } = req.body;
   const start = (pageCurr - 1) * pageSize; //起始位置
-  let sql =
-    "select mid,title,edit_time,author from stu_teach_manage where type=? and is_delete!=1 order by edit_time desc limit ?,? ";
+  
 
   try {
-    let result = await query(sql, type, start, pageSize);
+    let sql='select * from stu_teach_manage where type=? and is_delete!=1'
+    let result=await query(sql,type)
+    let total=result.length
+     sql =
+    "select mid,title,edit_time,author from stu_teach_manage where type=? and is_delete!=1 order by edit_time desc limit ?,? ";
+     result = await query(sql, type, start, pageSize);
 
     let is_lastPage = result.length < pageSize ? true : false;
     res.send({
       status: 0,
       message: "获取成功",
+      total,
       is_lastPage,
       data_number: result.length,
       data: result,
