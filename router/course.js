@@ -29,7 +29,7 @@ const {
 //管理员对课程的CRUD
 router.post("/create", expressJoi(create_course_schema), createCourse);
 router.post("/update", expressJoi(update_course_schema), updateCourse);
-router.get("/getCourseList", expressJoi(get_course_list_schema), getCourseList);
+router.post("/getCourseList", expressJoi(get_course_list_schema), getCourseList);
 router.post("/delete", expressJoi(delete_course_schema), deleteCourse);
 
 //学生选课

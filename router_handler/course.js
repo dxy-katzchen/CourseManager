@@ -117,7 +117,7 @@ exports.updateCourse = async (req, res) => {
 //按条件查询课程的公开信息(common),可以根据cname,tname,cid,is_open筛选,没传就是全部
 
 /**
- * @api {get} /course/getCourseList 根据类型获取课程列表(common)
+ * @api {post} /course/getCourseList 根据类型获取课程列表(common)
  * @apiDescription 按条件查询课程的公开信息(common),可以根据cname,tname,cid,is_open筛选,没传就是全部
  * @apiName getCourseList
  * @apiGroup Course
