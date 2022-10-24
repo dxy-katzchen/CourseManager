@@ -3,7 +3,7 @@
 exports.removeEmpty = (obj) => {
     Object.keys(obj).forEach(
       (key) =>
-        (obj[key] == null || obj[key] == undefined || obj[key] === "") &&
+        (obj[key] == null || obj[key] == undefined || obj[key] === ""|| obj[key] === -1) &&
         delete obj[key]
     );
 

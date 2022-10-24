@@ -39,7 +39,7 @@ exports.createCourse = async (req, res) => {
     //查询有无该教师
     let sql = "select * from users where uid=? and role=2";
     let result = await query(sql, tid);
-    if (result.length !== 1) return res.send("任课教师信息错误!");
+    if (result.length !== 1) return res.cc("任课教师信息错误!");
     req.body.tname = result[0].username;
     sql = "insert into course set ?";
     result = await query(sql, req.body);
@@ -166,9 +166,11 @@ exports.getCourseList = async (req, res) => {
   let sql = "select * from course";
   let { pageSize, pageCurr, ...queryInfo } = req.body;
   const start = (pageCurr - 1) * pageSize; //起始位置
+  
+  
   try {
     let result = await query(sql);
-    //过滤为空字符串,null和undefined的属性
+    //过滤为空字符串,null和undefined和-1的属性
     queryInfo = removeEmpty(queryInfo);
     if (JSON.stringify(queryInfo) == "{}")
       return res.send({

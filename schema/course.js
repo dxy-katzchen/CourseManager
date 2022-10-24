@@ -3,11 +3,11 @@ const joi = require("joi");
 const cid = joi.number().integer().min(1);
 
 const tid = joi.string().min(12).max(12);
-const tname = joi.string().min(1).max(12);
+const tname = joi.string().max(12);
 const uid = joi.string().min(12).max(12).required();
 //是否开放选课 0为未开放,1为开放
 const is_open = joi.number().integer().min(0).max(1);
-const cname = joi.string().min(1);
+const cname = joi.string();
 const credit = joi.number().integer().min(1);
 const type = joi.number().integer().min(1).max(3);
 //用来实现分页
@@ -39,13 +39,13 @@ exports.update_course_schema = {
 
 exports.get_course_list_schema = {
   body: {
-    cname,
-    cid,
-    tname,
-    is_open,
-    type,
-    pageSize,//必填
-    pageCurr,//必填
+    cname: cname.allow(""),
+    cid: joi.allow(null),
+    tname: tname.allow(""),
+    is_open: is_open.allow(-1),
+    type: type.allow(-1),
+    pageSize, //必填
+    pageCurr, //必填
   },
 };
 
@@ -81,5 +81,3 @@ exports.teacher_mark_stu_schema = {
     score: ev_score,
   },
 };
-
-
