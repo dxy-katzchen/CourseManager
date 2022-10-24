@@ -168,14 +168,14 @@ exports.getCourseList = async (req, res) => {
   const start = (pageCurr - 1) * pageSize; //起始位置
 
   try {
-    let result;
-    let total;
+    let result = await query(sql);
+    let total = result.length;
     //过滤为空字符串,null和undefined和-1的属性
     queryInfo = removeEmpty(queryInfo);
-    if (JSON.stringify(queryInfo) == "{}") {
+    if (JSON.stringify(queryInfo) == "{}"){
       sql += " limit " + start + "," + pageSize;
       result = await query(sql);
-      total = result.length;
+    
       return res.send({
         status: 0,
         total,
@@ -183,14 +183,14 @@ exports.getCourseList = async (req, res) => {
         data: result,
       });
     }
-
+     
     sql += " where";
 
     let attrArr = ["cname", "tname", "cid", "is_open", "type"];
     //难点,亮点,动态拼接sql字符串
     sql = await concatSqlStr(sql, attrArr, queryInfo);
     result = await query(sql);
-    total = result.length;
+     total = result.length;
     //分页处理
     sql += " limit " + start + "," + pageSize;
     result = await query(sql);
