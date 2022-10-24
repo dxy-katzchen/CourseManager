@@ -166,23 +166,31 @@ exports.getCourseList = async (req, res) => {
   let sql = "select * from course";
   let { pageSize, pageCurr, ...queryInfo } = req.body;
   const start = (pageCurr - 1) * pageSize; //起始位置
-  
-  
+
   try {
-    let result = await query(sql);
+    let result;
+    let total;
     //过滤为空字符串,null和undefined和-1的属性
     queryInfo = removeEmpty(queryInfo);
-    if (JSON.stringify(queryInfo) == "{}")
+    if (JSON.stringify(queryInfo) == "{}") {
+      sql += " limit " + start + "," + pageSize;
+      result = await query(sql);
+      total = result.length;
       return res.send({
         status: 0,
+        total,
         message: "成功获取所有课程信息",
         data: result,
       });
+    }
+
     sql += " where";
 
     let attrArr = ["cname", "tname", "cid", "is_open", "type"];
     //难点,亮点,动态拼接sql字符串
     sql = await concatSqlStr(sql, attrArr, queryInfo);
+    result = await query(sql);
+    total = result.length;
     //分页处理
     sql += " limit " + start + "," + pageSize;
     result = await query(sql);
@@ -190,6 +198,7 @@ exports.getCourseList = async (req, res) => {
     res.send({
       status: 0,
       message: "成功获取课程信息",
+      total,
       data: result,
     });
   } catch (error) {
