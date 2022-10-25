@@ -164,6 +164,7 @@ exports.updateCourse = async (req, res) => {
  */
 exports.getCourseList = async (req, res) => {
   let sql = "select * from course";
+  const { role } = req.user;
   let { pageSize, pageCurr, ...queryInfo } = req.body;
   const start = (pageCurr - 1) * pageSize; //起始位置
 
@@ -172,25 +173,17 @@ exports.getCourseList = async (req, res) => {
     let total = result.length;
     //过滤为空字符串,null和undefined和-1的属性
     queryInfo = removeEmpty(queryInfo);
-    if (JSON.stringify(queryInfo) == "{}"){
-      sql += " limit " + start + "," + pageSize;
-      result = await query(sql);
-    
-      return res.send({
-        status: 0,
-        total,
-        message: "成功获取所有课程信息",
-        data: result,
-      });
-    }
-     
-    sql += " where";
 
-    let attrArr = ["cname", "tname", "cid", "is_open", "type"];
-    //难点,亮点,动态拼接sql字符串
-    sql = await concatSqlStr(sql, attrArr, queryInfo);
-    result = await query(sql);
-     total = result.length;
+    if (JSON.stringify(queryInfo) !== "{}") {
+      sql += " where";
+
+      let attrArr = ["cname", "tname", "cid", "is_open", "type"];
+      //难点,亮点,动态拼接sql字符串
+      sql = await concatSqlStr(sql, attrArr, queryInfo);
+      result = await query(sql);
+      total = result.length;
+    }
+
     //分页处理
     sql += " limit " + start + "," + pageSize;
     result = await query(sql);
@@ -244,7 +237,77 @@ exports.deleteCourse = async (req, res) => {
     res.cc(error);
   }
 };
+/**
+ * @api {post} /course/student/getMyCourse 获取我选的课程列表(Stu)
+ * @apiDescription 获取我选的课程列表(Stu)
+ * @apiName stuGetMyCourseList
+ * @apiGroup CourseStudent
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
+ *     }
+  *@apiBody {int} pageSize 一页请求多少条数据,必填
+ * @apiBody {int} pageCurr 现在是多少页,必填
+ * @apiExample {js} 请求示例:
+ * {
+      pageSize: 10,
+      pageCurr: 1,
+ * }
+ * @apiSuccessExample {json} 返回内容:
+{
+    "status": 0,
+    "total": 2,
+    "message": "获取您的选课列表成功!",
+    "data": [
+     
+        {
+            "cid": 33,
+            "ev_score": null,
+            "stu_score": null,
+            "is_open": 1,
+            "cname": "是",
+            "credit": 1,
+            "type": 2,
+            "tname": "教师2"
+        },
+        {
+            "cid": 34,
+            "ev_score": null,
+            "stu_score": null,
+            "is_open": 1,
+            "cname": "2",
+            "credit": 2,
+            "type": 1,
+            "tname": "教师2"
+        }
+    ]
+}
+ * @apiVersion 1.0.0
+ */
+exports.stuGetMyCourseList = async (req, res) => {
+  const { uid, role } = req.user;
+  const { pageSize, pageCurr } = req.body;
+  const start = (pageCurr - 1) * pageSize; //起始位置
+  if (role !== 1) return res.cc("您没有学生权限");
+  let sql =
+    "select cid,ev_score,stu_score,is_open,cname,credit,type,tname from stu_choose_course inner join course using(cid) where uid=" +
+    uid;
+  try {
+    let result = await query(sql, uid);
+    const total = result.length;
+    sql += " limit " + start + "," + pageSize;
 
+    result = await query(sql);
+    res.send({
+      status: 0,
+      total,
+      message: "获取您的选课列表成功!",
+      data: result,
+    });
+  } catch (error) {
+    res.cc(error);
+  }
+};
 /**
  * @api {post} /course/student/choose 学生根据cid选课(Stu)
  * @apiDescription 学生根据cid选课(Stu)

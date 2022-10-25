@@ -23,7 +23,7 @@ const {
   getCourseStuList,
   teacherMarkStu,
   getMyCourseList,
-  
+  stuGetMyCourseList
 } = require("../router_handler/course");
 
 //管理员对课程的CRUD
@@ -31,7 +31,8 @@ router.post("/create", expressJoi(create_course_schema), createCourse);
 router.post("/update", expressJoi(update_course_schema), updateCourse);
 router.post("/getCourseList", expressJoi(get_course_list_schema), getCourseList);
 router.post("/delete", expressJoi(delete_course_schema), deleteCourse);
-
+//学生获取已选课程列表
+router.post('/student/getMyCourse',stuGetMyCourseList)
 //学生选课
 router.post(
   "/student/choose",
