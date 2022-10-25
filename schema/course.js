@@ -60,6 +60,11 @@ exports.stu_choose_course_schema = {
     cid: cid.required(),
   },
 };
+exports.stu_withdraw_course_schema = {
+  body: {
+    cid: cid.required(),
+  },
+};
 
 exports.stu_evaluate_course_schema = {
   body: {

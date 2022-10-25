@@ -11,7 +11,7 @@ const {
   stu_evaluate_course_schema,
   get_teacher_my_course_stu_schema,
   teacher_mark_stu_schema,
- 
+  stu_withdraw_course_schema
 } = require("../schema/course");
 const {
   createCourse,
@@ -23,7 +23,8 @@ const {
   getCourseStuList,
   teacherMarkStu,
   getMyCourseList,
-  stuGetMyCourseList
+  stuGetMyCourseList,
+  stuWithdraw
 } = require("../router_handler/course");
 
 //管理员对课程的CRUD
@@ -39,6 +40,8 @@ router.post(
   expressJoi(stu_choose_course_schema),
   stuChooseCourse
 );
+//学生退课
+router.post('/student/withdraw',expressJoi(stu_withdraw_course_schema),stuWithdraw)
 //学生互评
 router.post(
   "/student/evaluate",

@@ -358,7 +358,48 @@ exports.stuChooseCourse = async (req, res) => {
     res.cc(error);
   }
 };
+/**
+ * @api {post} /course/student/withdraw 学生根据cid退课(Stu)
+ * @apiDescription 学生根据cid退课(Stu)
+ * @apiName stuWithdraw
+ * @apiGroup CourseStudent
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
+ *     }
+ * @apiBody {int} cid 课程id,必填
+ * @apiExample {js} 请求示例:
+ * {
+        cid: 2
+ * }
+ * 
+ * @apiSuccessExample {json} 返回内容:
+{
+    "status": 0,
+    "message": "退课成功"
+}
+ * @apiVersion 1.0.0
+ */
+exports.stuWithdraw = async (req, res) => {
+  const { uid, role } = req.user;
+  if (role !== 1) return res.cc("没有权限");
+  const { cid } = req.body;
+  try {
+    //检查课程是否存在或者已经结束选课
+    let sql = "select * from course where cid=?";
+    let result = await query(sql, cid);
+    if (result.length !== 1) return res.cc("课程不存在");
+    if (result[0].is_open == 0) return res.cc("该课程已经结束选课");
 
+    //退课
+    sql = "delete from stu_choose_course where cid=? and uid=?";
+    result = await query(sql, cid, uid);
+    if (result.affectedRows !== 1) return res.cc("退课失败");
+    res.cc("退课成功", 0);
+  } catch (error) {
+    res.cc(error);
+  }
+};
 /**
  * @api {post} /course/student/evaluste 学生给这门课程打分(Stu)
  * @apiDescription 学生给这门课程打分
