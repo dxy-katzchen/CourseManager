@@ -401,7 +401,7 @@ exports.stuWithdraw = async (req, res) => {
   }
 };
 /**
- * @api {post} /course/student/evaluste 学生给这门课程打分(Stu)
+ * @api {post} /course/student/evaluate 学生给这门课程打分(Stu)
  * @apiDescription 学生给这门课程打分
  * @apiName stuEvaluateCourse
  * @apiGroup CourseStudent
