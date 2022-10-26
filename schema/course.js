@@ -86,3 +86,9 @@ exports.teacher_mark_stu_schema = {
     score: ev_score,
   },
 };
+exports.get_list_schema = {
+  body: {
+    pageSize, //必填
+    pageCurr, //必填
+  },
+};

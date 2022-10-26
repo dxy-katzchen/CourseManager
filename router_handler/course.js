@@ -518,7 +518,6 @@ exports.teacherMarkStu = async (req, res) => {
  * @apiExample {js} 请求示例:
  * {
         cid: 2,
-        ev_score:69
  * }
  * 
  * @apiSuccessExample {json} 返回内容:
@@ -561,9 +560,9 @@ exports.getCourseStuList = async (req, res) => {
   }
 };
 /**
- * @api {post} /course/teacher/getMyCourseList 获取我教的课程列表(Teacher)
+ * @api {post} /course/teacher/getTeacherCourseList 获取我教的课程列表(Teacher)
  * @apiDescription 获取我教的课程列表(Teacher)
- * @apiName getMyCourseList
+ * @apiName getTeacherCourseList
  * @apiGroup CourseTeacher
  * @apiHeaderExample {json} Header-Example:
  *     {
@@ -614,24 +613,28 @@ exports.getCourseStuList = async (req, res) => {
 }
  * @apiVersion 1.0.0
  */
-exports.getMyCourseList = async (req, res) => {
+exports.getTeacherCourseList = async (req, res) => {
   const { uid, role } = req.user;
   const { pageSize, pageCurr } = req.body;
+  
+  
   const start = (pageCurr - 1) * pageSize;
   if (role !== 2) return res.cc("您没有教师权限");
-  let sql = "select * from course where tid=? ";
+  let sql = "select * from course where tid= "+uid;
   try {
-    let result = await query(sql, uid);
+    let result = await query(sql);
     const total = result.length;
-    sql += "limit " + start + "," + pageSize;
+    sql += " limit " + start + "," + pageSize;
     result = await query(sql);
     res.send({
       status: 0,
       total,
+      
       message: "获取您的教课列表成功!",
       data: result,
     });
   } catch (error) {
     res.cc(error);
+   
   }
 };
