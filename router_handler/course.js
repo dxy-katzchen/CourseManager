@@ -569,11 +569,17 @@ exports.getCourseStuList = async (req, res) => {
  *     {
  *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
  *     }
-
+ * @apiBody {int} pageSize 一页请求多少条数据,必填
+ * @apiBody {int} pageCurr 现在是多少页,必填
+ * @apiExample {js} 请求示例:
+ * {
+      pageSize: 10,
+      pageCurr: 1,
+ * }
  * @apiSuccessExample {json} 返回内容:
 {
     "status": 0,
-    "length": 3,
+    "total": 3,
     "message": "获取您的教课列表成功!",
     "data": [
         {
@@ -610,13 +616,18 @@ exports.getCourseStuList = async (req, res) => {
  */
 exports.getMyCourseList = async (req, res) => {
   const { uid, role } = req.user;
+  const { pageSize, pageCurr } = req.body;
+  const start = (pageCurr - 1) * pageSize;
   if (role !== 2) return res.cc("您没有教师权限");
-  let sql = "select * from course where tid=?";
+  let sql = "select * from course where tid=? ";
   try {
     let result = await query(sql, uid);
+    const total = result.length;
+    sql += "limit " + start + "," + pageSize;
+    result = await query(sql);
     res.send({
       status: 0,
-      length: result.length,
+      total,
       message: "获取您的教课列表成功!",
       data: result,
     });
