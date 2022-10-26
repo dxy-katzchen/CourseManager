@@ -499,7 +499,7 @@ exports.teacherMarkStu = async (req, res) => {
     sql = "update stu_choose_course set stu_score=? where uid=? and cid=?";
     result = await query(sql, score, stu_id, cid);
     if (result.affectedRows !== 1) return res.cc("打分失败");
-    res.cc("打分成功");
+    res.cc("打分成功",0);
   } catch (error) {
     res.cc(error);
   }
