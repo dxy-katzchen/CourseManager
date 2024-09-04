@@ -1,18 +1,18 @@
 const { query } = require("../db");
 
 /**
- * @api {post} /userpage/create 创建用户主页
- * @apiDescription 创建用户主页，什么都不用发
+ * @api {post} /userpage/create Creating a user homepage
+ * @apiDescription Create a user homepage, nothing needs to be sent
  * @apiName createUserpage
  * @apiGroup UserPage
  * @apiHeaderExample {json} Header-Example:
  *     {
  *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
  *     }
- * @apiSuccessExample {json} 返回内容:
+ * @apiSuccessExample {json} Return content:
 {
     "status": 0,
-    "message": "创建用户主页成功!",
+    "message": "User homepage created successfully!",
     "data": {
         "upid": 6
     }
@@ -26,20 +26,23 @@ exports.createUserpage = async (req, res) => {
   let sql = "select upid from users where uid=?";
   let result = await query(sql, uid);
 
-  if (result.upid) return res.cc("您已有用户主页,不能再次创建");
+  if (result.upid)
+    return res.cc(
+      "You already have a user homepage, you cannot create it again"
+    );
   //插入一行,只有用户的身份
   sql = "insert into userpage set type=?";
   try {
     result = await query(sql, role);
-    if (result.affectedRows !== 1) return res.cc("创建失败");
+    if (result.affectedRows !== 1) return res.cc("Create failed");
     const upid = result.insertId;
     //更新users表中用户的upid值
     sql = "update users set upid=? where uid=?";
     result = await query(sql, upid, uid);
-    if (result.affectedRows !== 1) return res.cc("创建失败");
+    if (result.affectedRows !== 1) return res.cc("Create failed");
     res.send({
       status: 0,
-      message: "创建用户主页成功!",
+      message: "Create user homepage successfully!",
       data: {
         upid,
       },
@@ -49,36 +52,36 @@ exports.createUserpage = async (req, res) => {
   }
 };
 /**
- * @api {post} /userpage/update 更新用户主页信息
- * @apiDescription 更新用户主页信息
+ * @api {post} /userpage/update Updating user homepage information
+ * @apiDescription Update user homepage information
  * @apiName updateUserpage
  * @apiGroup UserPage
  * @apiHeaderExample {json} Header-Example:
  *     {
  *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
  *     }
- * @apiBody {int} upid 用户主页id,必填
- * @apiBody {string} comment 简介,选填(学生,教师)
- * @apiBody {string} photo 照片地址,选填(学生,教师)
- * @apiBody {string} blog 博客地址,选填(学生)
- * @apiBody {string} book 论文著作,选填(教师)
- * @apiBody {string} search 研究方向,选填(教师)
- * @apiBody {string} teachcourse 教授课程,选填(教师)
- * @apiExample {js} 请求示例:
+ * @apiBody {int} upid User homepage id, required
+ * @apiBody {string} comment Introduction, optional (student, teacher)
+ * @apiBody {string} photo Photo address, optional (student, teacher)
+ * @apiBody {string} blog Blog address, optional (student)
+ * @apiBody {string} book Thesis and papers, optional (teacher)
+ * @apiBody {string} search Research direction, optional (teacher)
+ * @apiBody {string} teachcourse Teaching courses, optional (teacher)
+ * @apiExample {js} Request example:
  * {
  * upid: 7,
  * comment: "我是dxy",
- * book: "《计算机图形学》",
- * search: "计算机图形学",
+ * book: "《computer graphics》",
+ * search: "computer graphics",
  * blog: "https://github.com/",
  * photo: "https://sm.ms/image/t5cHgLMCO1XshQj",
- * teachcourse: "数据结构与算法,计算机引论",
+ * teachcourse: "Data Structures and Algorithms, Introduction to Computing",
  * }
  * 
- * @apiSuccessExample {json} 返回内容:
+ * @apiSuccessExample {json} Return content:
 {
     "status": 0,
-    "message": "更新用户主页成功"
+    "message": "Update user homepage successfully!"
 }
  * @apiVersion 1.0.0
  */
@@ -88,38 +91,38 @@ exports.updateUserpage = async (req, res) => {
   let sql = "select * from userpage where upid=?";
   try {
     let result = await query(sql, upid);
-    if (result.length !== 1) return res.cc("找不到该主页");
+    if (result.length !== 1) return res.cc("User homepage not found");
     sql = "update userpage set ? where upid=?";
     result = await query(sql, userpageInfo, upid);
-    if (result.affectedRows !== 1) return res.cc("更新用户主页失败");
-    res.cc("更新用户主页成功", 0);
+    if (result.affectedRows !== 1) return res.cc("Update user homepage failed");
+    res.cc("Update user homepage successfully!", 0);
   } catch (error) {
     res.cc(error);
   }
 };
 /**
- * @api {get} /userpage/info 获取用户主页信息
- * @apiDescription 获取用户主页信息，什么都不用发
+ * @api {get} /userpage/info Getting user homepage information
+ * @apiDescription Get user homepage information, nothing needs to be sent
  * @apiName getPageInfo
  * @apiGroup UserPage
  * @apiHeaderExample {json} Header-Example:
  *     {
  *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
  *     }
- * @apiSuccessExample {json} 返回内容:
+ * @apiSuccessExample {json} Return content:
 {
     "status": 0,
-    "message": "获取主页信息成功！",
+    "message": "Get user homepage information successfully!",
     "data": [
         {
             "upid": 7,
             "type": 1,
-            "comment": "我是dxy",
-            "photo": "照片地址",
-            "blog": "博客",
-            "teachcourse": "教授课程",
-            "search": "研究方向",
-            "book": "论文著作"
+            "comment": "Introduction",
+            "photo": "Photo address",
+            "blog": "Blog",
+            "teachcourse": "Teaching courses",
+            "search": "Research direction",
+            "book": "Thesis and papers"
         }
     ]
 }
@@ -131,15 +134,18 @@ exports.getPageInfo = async (req, res) => {
   let sql = "select * from users where uid=?";
   try {
     let result = await query(sql, uid);
-    if (result.length !== 1) return res.cc("获取失败");
-    if (!result[0].upid) return res.cc("该用户还没有主页，请先创建");
+    if (result.length !== 1) return res.cc("Get failed");
+    if (!result[0].upid)
+      return res.cc(
+        "The user does not have a homepage, please create one first"
+      );
     const { upid } = result[0];
     sql = "select * from userpage where upid=?";
     result = await query(sql, upid);
-    if (result.length !== 1) return res.cc("获取失败");
+    if (result.length !== 1) return res.cc("Get failed");
     res.send({
       status: 0,
-      message: "获取主页信息成功！",
+      message: "Get user homepage information successfully!",
       data: result[0],
     });
   } catch (error) {

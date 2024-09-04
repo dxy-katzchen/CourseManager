@@ -2,9 +2,11 @@ const res = require("express/lib/response");
 const mysql = require("mysql");
 
 const db = mysql.createPool({
-  host: "127.0.0.1",
+  host: "localhost",
   user: "root",
   password: "20001123",
+  //服务器
+  // password: "123456",
   database: "course_manager",
 });
 

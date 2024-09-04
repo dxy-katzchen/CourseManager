@@ -1,10 +1,7 @@
 {
-    "name": "CourseManager课程管理系统接口文档",
-    "version": "1.0.0",
-    "description": "课程管理系统接口文档",
-    "title": "课程管理系统接口文档",
-    "url": "http://127.0.0.1:1111"
-  }
-  
-  
-  
+  "name": "CourseManager course management system interface documentation",
+  "version": "1.0.0",
+  "description": "Course Management System Interface Documentation",
+  "title": "Course Management System Interface Documentation",
+  "url": "http://127.0.0.1:88"
+}

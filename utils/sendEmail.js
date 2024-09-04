@@ -1,6 +1,5 @@
 const nodemailer = require("nodemailer");
 
-
 // 开启一个 SMTP 连接池
 const transporter = nodemailer.createTransport({
   host: "smtp.qq.com",
@@ -18,8 +17,8 @@ const mailOptionsMaker = (email, checkCode) => ({
   from: '"dxy666666" <1363867975@qq.com>', // 发件人
   to: `${email}`, // 收件人
   subject: "CourseManager邮箱验证", // 主题
-  text: "这是一封来自 Node.js 的测试邮件", // plain text body
-  html: `<div>这里是CourseManager课程管理系统,您的验证码是<h1'>${checkCode}</h1> </div>`, // html body
+  text: "This is a test email from Node.js", // plain text body
+  html: `<div>This is CourseManager, your verification code is<h1'>${checkCode}</h1> </div>`, // html body
 });
 
 const sendEmail = (email, checkCode) =>
@@ -32,8 +31,8 @@ const sendEmail = (email, checkCode) =>
       }
       resolve();
     });
-  })
+  });
 
 module.exports = {
-    sendEmail
-}
+  sendEmail,
+};
