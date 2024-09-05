@@ -1,5 +1,4 @@
-const res = require("express/lib/response");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
 const db = mysql.createPool({
   host: "localhost",
