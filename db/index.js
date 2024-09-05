@@ -5,7 +5,7 @@ const db = mysql.createPool({
   user: "root",
   password: "20001123",
   //服务器
-  // password: "123456",
+
   database: "course_manager",
 });
 

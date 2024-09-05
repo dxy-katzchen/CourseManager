@@ -18,7 +18,7 @@ const mailOptionsMaker = (email, checkCode) => ({
   to: `${email}`, // 收件人
   subject: "CourseManager邮箱验证", // 主题
   text: "This is a test email from Node.js", // plain text body
-  html: `<div>This is CourseManager, your verification code is<h1'>${checkCode}</h1> </div>`, // html body
+  html: `<div>This is CourseManager, your verification code is <h1>${checkCode}</h1> </div>`, // html body
 });
 
 const sendEmail = (email, checkCode) =>
