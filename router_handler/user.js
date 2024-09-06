@@ -84,6 +84,7 @@ exports.register = async (req, res) => {
       return res.cc("id number or email has been registered");
     }
     userinfo.password = bcypt.hashSync(userinfo.password, 10);
+    userinfo.avatar = "https://s2.loli.net/2024/09/06/hUCDWgvZ7QEp6B8.png";
     const sql2 = "insert into users set ?";
     const result2 = await query(sql2, userinfo);
 
