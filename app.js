@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const joi = require("joi");
-const expressJWT = require("express-jwt");
+
 const { jwtSecretKey } = require("./config");
+const { expressjwt } = require("express-jwt");
 const app = express();
 
 app.use(cors());
@@ -20,7 +21,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(expressJWT({ secret: jwtSecretKey }).unless({ path: [/^\/user\//] }));
+app.use(
+  expressjwt({
+    secret: jwtSecretKey,
+    algorithms: ["HS256"],
+    requestProperty: "user",
+  }).unless({
+    path: [/^\/user\//],
+  })
+);
 //Import user login module, no token verification required
 const userRouter = require("./router/user");
 app.use("/user", userRouter);

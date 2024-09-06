@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 const mailOptionsMaker = (email, checkCode) => ({
   from: '"dxy666666" <1363867975@qq.com>', // 发件人
   to: `${email}`, // 收件人
-  subject: "CourseManager邮箱验证", // 主题
+  subject: "CourseManager Email Verification", // 主题
   text: "This is a test email from Node.js", // plain text body
   html: `<div>This is CourseManager, your verification code is <h1>${checkCode}</h1> </div>`, // html body
 });
