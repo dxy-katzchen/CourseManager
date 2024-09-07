@@ -217,6 +217,45 @@ exports.intoBin = async (req, res) => {
   }
 };
 /**
+ * @api {post} /manage/recover Recover articles according to mid (Admin)
+ * @apiDescription Recover articles according to mid
+ * @apiName recoverPage
+ * @apiGroup studentManage
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIyMDE5MDAzMDEwODIiLCJ1c2VybmFtZSI6ImRpbmd4aW55aSIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiJkaW5neGlueWk2NjY2NjZAMTI2LmNvbSIsImF2YXRhciI6bnVsbCwicm9sZSI6MywidXBpZCI6IjciLCJpYXQiOjE2NjUxNzk3ODMsImV4cCI6NDY2NTI2NjE4M30.qD-lk84NHkE9ePaTcdlC_6n3Gi6B7P0CFNsxJt3jvKw"
+ *     }
+ * @apiBody {int} mid Article id, required
+
+ * @apiExample {js} Request example:
+ * {
+        mid: 19
+ * }
+ * 
+ * @apiSuccessExample {json} Response content:
+{
+    "status": 0,
+    "message": "Recover successfully!"
+}
+ * @apiVersion 1.0.0
+ */
+exports.recoverPage = async (req, res) => {
+  //需要校验权限
+  const { role } = req.user;
+  if (role !== 3) return res.cc("You don't have permission");
+  const { mid } = req.body;
+
+  let sql = "update stu_teach_manage set is_delete=0 where mid=?";
+  try {
+    let result = await query(sql, mid);
+    if (result.affectedRows !== 1) return res.cc("Failed to recover");
+    res.cc("Recover successfully!", 0);
+  } catch (error) {
+    res.cc(error);
+  }
+};
+
+/**
  * @api {post} /manage/getPageDetails Get article details by mid
  * @apiDescription Get article details by mid, regardless of whether it is in the recycle bin
  * @apiName getPageDetails

@@ -7,9 +7,10 @@ const {
   updateManagePage,
   getManageList,
   intoBin,
+  recoverPage,
   getPageDetails,
   getBinList,
-  deletePage
+  deletePage,
 } = require("../router_handler/manage");
 const {
   update_manage_schema,
@@ -28,9 +29,11 @@ router.post("/create", createManagePage);
 router.post("/update", expressJoi(update_manage_schema), updateManagePage);
 //根据id删除学工管理文章,加入回收站(Admin)
 router.post("/toBin", expressJoi(get_page_schema), intoBin);
+//恢复文章(Admin)
+router.post("/recover", expressJoi(get_page_schema), recoverPage);
 //获取在回收站的文章列表(Admin)
 router.post("/getBinList", expressJoi(get_bin_list), getBinList);
 //删除文章(Admin)
-router.post('/delete', expressJoi(get_page_schema),deletePage)
+router.post("/delete", expressJoi(get_page_schema), deletePage);
 
 module.exports = router;
